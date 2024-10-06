@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 350px;
+        }
+        
+        h1 {
+            color: #007bff;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-size: 16px;
+            margin: 10px 0 5px;
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        
+        input[type="number"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        
+        input[type="checkbox"] {
+            transform: scale(1.2);
+            margin-right: 10px;
+        }
+        
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        p#result {
+            margin-top: 20px;
+            font-size: 18px;
+            word-break: break-word;
+        }
+        /* Responsive Design */
+        
+        @media (max-width: 400px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+            button {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Password Generator</h1>
+        <label for="length">Password Length:</label>
+        <input type="number" id="length" value="8" min="1" max="50">
+
+        <label for="specialCharacters">
+            <input type="checkbox" id="specialCharacters" checked> Include Special Characters
+        </label>
+
+        <button onclick="generatePassword()">Generate Password</button>
+
+        <p id="result"></p>
+    </div>
+
+    <script>
+        async function generatePassword() {
+            const length = document.getElementById('length').value;
+            const includeSpecialCharacters = document.getElementById('specialCharacters').checked;
+
+            const url = `/generate-password?length=${length}&includeSpecialCharacters=${includeSpecialCharacters}`;
+            try {
+                const response = await fetch(url);
+                if (response.ok) {
+                    const password = await response.text();
+                    document.getElementById('result').innerText = `Generated Password: ${password}`;
+                } else {
+                    document.getElementById('result').innerText = 'Error generating password. Please try again.';
+                }
+            } catch (error) {
+                document.getElementById('result').innerText = 'Failed to fetch the password. Server might be down.';
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+
+</html>
